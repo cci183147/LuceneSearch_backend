@@ -4,7 +4,7 @@ public class Request {
     public String queryStr;
     public String startDate;
     public String endDate ;
-    public Integer page = 1;
+    public Integer page = 0;
     public String sortField = "title";
 
     // 必须有无参构造函数供Spring反序列化

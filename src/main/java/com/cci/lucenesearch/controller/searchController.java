@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/documents")
@@ -20,8 +21,17 @@ public class searchController {
     // 文章查询接口
     @GetMapping("/search")
     public List<Document> searchDocuments(@RequestBody Request request) throws IOException, ParseException, InvalidTokenOffsetsException {
+        // 获取返回的结果 Map
+        Map<String, Object> response = documentService.searchDocuments(request);
 
-        return documentService.searchDocuments(request);
+        // 强制类型转换
+        Object resultsObj = response.get("results");
+        if (resultsObj instanceof List<?>) {
+            return (List<Document>) resultsObj;
+        } else {
+            // 处理类型不匹配的情况
+            throw new IllegalStateException("Invalid results type");
+        }
     }
 
     // 下载 PDF 的接口（返回 PDF 文件路径）
