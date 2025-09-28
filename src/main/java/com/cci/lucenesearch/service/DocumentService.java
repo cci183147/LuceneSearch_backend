@@ -95,8 +95,7 @@ public class DocumentService {
             query = combinedQuery.build();
         }
 
-        // 排序
-//        Sort sort = new Sort(new SortField(sortField, SortField.Type.STRING));
+
 
         // 查询并获取结果
         TopDocs topDocs = searcher.search(query, 1000);
@@ -128,22 +127,38 @@ public class DocumentService {
             }
             resultDocs.add(doc);
         }
+            long totalCount = topDocs.totalHits.value;
             // 将搜索结果缓存
-            searchCache.put(queryId, new CacheEntry(resultDocs));
+            searchCache.put(queryId, new CacheEntry(resultDocs,totalCount));
             reader.close();
             // 分页处理
-            return getStringObjectMap(pageSize, page, queryId);
+            return getStringObjectMap(pageSize, page, queryId,totalCount);
 
     }
     @NotNull
     private Map<String, Object> getStringObjectMap(int pageSize, int page, String queryId) {
         List<Document> cachedDocs = getCachedResults(queryId, page, pageSize);
         Map<String, Object> response = new HashMap<>();
-        response.put("results", cachedDocs);
+        long totalCount = searchCache.get(queryId).totalCount;
         response.put("page", page);
         response.put("pageSize", pageSize);
+        response.put("results", cachedDocs);
+        response.put("totalCount", totalCount);
         return response;
     }
+
+    @NotNull
+    private Map<String, Object> getStringObjectMap(int pageSize, int page, String queryId, long totalCount) {
+        List<Document> cachedDocs = getCachedResults(queryId, page, pageSize);
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("page", page);
+        response.put("pageSize", pageSize);
+        response.put("totalCount", totalCount);
+        response.put("results", cachedDocs);// 新增字段：总数
+        return response;
+    }
+
 
     // 从缓存中获取分页数据
     private List<Document> getCachedResults(String queryId, int page, int pageSize) {
@@ -163,10 +178,12 @@ public class DocumentService {
     }
     private static class CacheEntry {
         List<Document> documents;
+        long totalCount;
         long timestamp;
 
-        CacheEntry(List<Document> documents) {
+        CacheEntry(List<Document> documents, long totalCount) {
             this.documents = documents;
+            this.totalCount = totalCount;
             this.timestamp = System.currentTimeMillis();
         }
     }

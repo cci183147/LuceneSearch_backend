@@ -50,7 +50,7 @@ public class index {
                     luceneDoc.add(new TextField("title", title, Field.Store.YES));
                     luceneDoc.add(new TextField("author", author, Field.Store.YES));
                     luceneDoc.add(new TextField("abstract", abstractText, Field.Store.YES));
-                    luceneDoc.add(new StringField("pdfPath", pdfPath, Field.Store.YES)); // 存储 PDF 路径
+                    luceneDoc.add(new StringField("pdfPath", fileName, Field.Store.YES)); // 存储 PDF 路径
                     long timestamp = date.getTime(); // 转换为时间戳
                     luceneDoc.add(new TextField("publicationDate",publicationDate,Field.Store.YES));
                     luceneDoc.add(new LongPoint("publicationDate", timestamp));
