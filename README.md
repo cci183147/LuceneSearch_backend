@@ -6,7 +6,8 @@
 `docker run --rm --init --ulimit core=0 -p 8070:8070 grobid/grobid:0.8.1`
 访问`localhost:8070`
 见到如下画面说明启动成功
-![[Grobid 1.png]]
+<img width="1200" height="574" alt="Grobid" src="https://github.com/user-attachments/assets/bac685c6-a8a9-4cf7-bc40-b177f04fefe4" />
+
 `python3 pdfs.py`
 处理数据
 最后将pdf文件和得到的xml文件放在项目的resources下
@@ -14,6 +15,7 @@
 
 运行index.java
 运行完成后可见`Indexing completed!`说明索引生成成功
+
 最后启动LuceneSearchApplication即可
 
 ##### 注:
