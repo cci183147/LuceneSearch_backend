@@ -3,6 +3,7 @@
 ## 数据准备
 准备好pdf文件和grobid
 推荐使用**docker**
+
 `docker run --rm --init --ulimit core=0 -p 8070:8070 grobid/grobid:0.8.1`
 访问`localhost:8070`
 见到如下画面说明启动成功
